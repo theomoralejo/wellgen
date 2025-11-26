@@ -32,7 +32,26 @@ const app = {
     init() {
         this.renderLayout();
         this.initScrollAnimations();
-        this.navigate('home');
+        
+        // Handle initial hash
+        this.handleHashChange();
+
+        // Listen for hash changes
+        window.addEventListener('hashchange', () => this.handleHashChange());
+    },
+
+    handleHashChange() {
+        const hash = window.location.hash.slice(1); // Remove #
+        if (!hash) {
+            this.navigate('home', null, false);
+            return;
+        }
+
+        const parts = hash.split('/');
+        const view = parts[0];
+        const param = parts[1];
+
+        this.navigate(view, param, false);
     },
 
     renderLayout() {
@@ -143,8 +162,16 @@ const app = {
         };
     },
 
-    async navigate(viewName, param = null) {
+    async navigate(viewName, param = null, updateHistory = true) {
         const container = document.getElementById('app-view');
+        
+        // Update Hash if needed
+        if (updateHistory) {
+            const newHash = param ? `#${viewName}/${param}` : `#${viewName}`;
+            if (window.location.hash !== newHash) {
+                window.history.pushState(null, '', newHash);
+            }
+        }
         
         // Animate Out
         container.classList.add('view-hidden');
