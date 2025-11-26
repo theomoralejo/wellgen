@@ -589,7 +589,7 @@ const app = {
                 </div>
                 
                 <div class="relative rounded-3xl overflow-hidden h-96 mb-32 shadow-2xl fade-up">
-                    <img src="img/banner.webp" class="absolute inset-0 w-full h-full object-cover">
+                    <img src="img/controle-de-qualidade.png" class="absolute inset-0 w-full h-full object-cover">
                     <div class="absolute inset-0 bg-slate-900/50 flex items-center justify-center">
                         <div class="text-center text-white max-w-2xl px-6">
                             <h3 class="text-3xl font-bold mb-4">Compromisso com a Excelência</h3>
