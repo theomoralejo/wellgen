@@ -247,7 +247,7 @@ const app = {
                         </div>
                         <h1 class="text-5xl lg:text-7xl font-bold text-slate-900 leading-[1.1] mb-8 fade-up">
                             Controle. Ciência.<br>
-                            <span class="text-transparent bg-clip-text bg-gradient-to-r from-wellgen-600 to-wellgen-400">Resultado.</span>
+                            <span class="text-[#013FFF]">Resultado.</span>
                         </h1>
                         <p class="text-xl text-slate-600 mb-10 leading-relaxed max-w-lg fade-up">
                             Autenticidade e tecnologia em cada composto. A Wellgen Labs combina rigor científico com uma estética moderna para construir confiança por meio da transparência e do design.
