@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WELLGEN Labs</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0" />
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        wellgen: {
+                            50: '#f0f7ff',
+                            100: '#e0f0fe',
+                            200: '#bae2fd',
+                            300: '#7ccbfd', // inferred
+                            400: '#36b2fa',
+                            500: '#0ea5e9',
+                            600: '#0078cc',
+                            700: '#0160a4',
+                            800: '#065286',
+                            900: '#001e3c',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['Plus Jakarta Sans', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* View Transitions */
+        #app-view {
+            transition: opacity 0.4s ease-in-out, transform 0.4s ease-in-out;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .view-hidden {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+
+        /* Scroll Animations */
+        .fade-up {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+
+        .scale-up {
+            opacity: 0;
+            transform: scale(0.95);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+
+        .animate-in {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+
+        /* Loader */
+        .loader {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 40px;
+        }
+
+        .circle {
+            width: 10px;
+            height: 10px;
+            margin: 0 5px;
+            background-color: #0078cc;
+            border-radius: 50%;
+            animation: loader-bounce 0.6s infinite alternate;
+        }
+
+        .circle:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .circle:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        .circle:nth-child(4) {
+            animation-delay: 0.6s;
+        }
+
+        @keyframes loader-bounce {
+            to {
+                transform: translateY(-10px);
+                opacity: 0.5;
+            }
+        }
+
+        /* Floating WhatsApp */
+        .floating-whatsapp {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            z-index: 100;
+            background-color: #25D366;
+            color: white;
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .floating-whatsapp:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 24px rgba(37, 211, 102, 0.6);
+        }
+    </style>
+</head>
+
+<body class="antialiased selection:bg-wellgen-600 selection:text-white bg-slate-50">
+
+    <!-- Navigation -->
+    <header
+        class="fixed w-full z-50 bg-white/90 backdrop-blur-md border-b border-slate-200 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="flex items-center justify-between h-24">
+                <!-- Logo -->
+                <div class="flex items-center gap-4 cursor-pointer group" onclick="app.navigate('home')">
+                    <div>
+                        <img src="/img/logo-wellgen.svg" width="170px"/>
+                    </div>
+                </div>
+
+                <!-- Desktop Nav -->
+                <nav id="desktop-nav" class="hidden md:flex items-center gap-10">
+                    <!-- Nav items will be rendered by JS -->
+                </nav>
+
+                <!-- Actions (Verify) -->
+                <div class="hidden md:flex items-center gap-4">
+                    <button onclick="app.navigate('verify')" class="group relative px-6 py-3 bg-wellgen-900 text-white rounded-xl overflow-hidden shadow-lg hover:shadow-wellgen-600/30 transition-all hover:-translate-y-0.5 active:translate-y-0">
+                        <div class="absolute inset-0 bg-gradient-to-tr from-wellgen-800 to-wellgen-900 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                        <div class="relative z-10 flex items-center gap-3">
+                            <span class="material-symbols-rounded text-wellgen-400 group-hover:text-white transition-colors">qr_code_scanner</span>
+                            <div class="flex flex-col items-start leading-none">
+                                <span class="text-[10px] font-bold uppercase tracking-widest text-wellgen-200 group-hover:text-wellgen-100">Verificar</span>
+                                <span class="font-bold text-sm">Autenticidade</span>
+                            </div>
+                        </div>
+                    </button>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <button class="md:hidden p-2 text-slate-700" onclick="toggleMobileMenu()">
+                    <span id="mobile-menu-icon" class="material-symbols-rounded text-3xl">menu</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-slate-200">
+            <div id="mobile-nav-items" class="px-6 py-4 space-y-4">
+                <!-- Mobile nav items will be rendered by JS -->
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main id="app-view" class="min-h-screen pt-24">
+        <!-- Views will be rendered here -->
+    </main>
+
+    <!-- Footer -->
+    <footer id="main-footer" class="bg-wellgen-900 text-white pt-24 pb-12 relative overflow-hidden mt-20">
+        <!-- Footer content will be rendered by JS -->
+    </footer>
+
+    <!-- Floating WhatsApp -->
+    <a href="#" class="floating-whatsapp" title="Fale Conosco no WhatsApp">
+        <span class="material-symbols-rounded text-3xl">chat</span>
+    </a>
+
+    <!-- Scripts -->
+    <script src="js/products.js"></script>
+    <script src="js/app.js"></script>
+    <script>
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            const icon = document.getElementById('mobile-menu-icon');
+            menu.classList.toggle('hidden');
+            icon.textContent = menu.classList.contains('hidden') ? 'menu' : 'close';
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            app.init();
+        });
+    </script>
+</body>
+
+</html>
